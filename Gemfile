@@ -54,3 +54,7 @@ group :development, :test do
   gem 'webmock', :require => false
   gem 'rake'
 end
+
+group :production, :staging do
+  gem 'rainbows'
+end
