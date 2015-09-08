@@ -127,6 +127,10 @@ group :production do
   gem 'unicorn', '~> 4.9.0'
 end
 
+group :production, :staging do
+  gem 'rainbows'
+end
+
 # Platform requirements.
 gem 'ffi', '>= 1.9.4'		# required by typhoeus; 1.9.4 has fixes for *BSD.
 gem 'tzinfo', '>= 1.2.0'	# required by rails; 1.2.0 has support for *BSD and Solaris.
