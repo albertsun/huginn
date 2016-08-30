@@ -96,6 +96,7 @@ class Admin::UsersController < ApplicationController
   def switch_back
     if session[:original_admin_user_id]
       sign_in(:user, User.find(session[:original_admin_user_id]), { bypass: true })
+      session.delete(:original_admin_user_id)
     else
       redirect_to(root_path, alert: 'Admin access required to view that page.') and return
     end

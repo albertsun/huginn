@@ -14,10 +14,6 @@ class LogsController < ApplicationController
   protected
 
   def load_agent
-    if current_user.admin?
-      @agent = Agent.find(params[:agent_id])
-    else
-      @agent = current_user.agents.find(params[:agent_id])
-    end
+    @agent = current_user.agents.find(params[:agent_id])
   end
 end
