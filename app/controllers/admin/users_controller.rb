@@ -1,7 +1,7 @@
 class Admin::UsersController < ApplicationController
-  before_action :authenticate_admin!
+  before_action :authenticate_admin!, except: [:switch_back]
 
-  before_action :find_user, only: [:edit, :destroy, :update, :deactivate, :activate]
+  before_action :find_user, only: [:edit, :destroy, :update, :deactivate, :activate, :switch_user]
 
   helper_method :resource
 
@@ -81,6 +81,25 @@ class Admin::UsersController < ApplicationController
       format.html { redirect_to admin_users_path, notice: "User '#{@user.username}' was activated." }
       format.json { render json: @user, status: :ok, location: admin_users_path(@user) }
     end
+  end
+
+  # allow an admin to sign-in as any other user
+
+  def switch_user
+    return unless current_user.admin?
+    session[:original_admin_user_id] = current_user.id
+    sign_in(:user, @user, { bypass: true })
+    # redirect_to root_url # or user_root_url
+    redirect_to agents_path
+  end
+
+  def switch_back
+    if session[:original_admin_user_id]
+      sign_in(:user, User.find(session[:original_admin_user_id]), { bypass: true })
+    else
+      redirect_to(root_path, alert: 'Admin access required to view that page.') and return
+    end
+    redirect_to admin_users_path
   end
 
   private

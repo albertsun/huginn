@@ -85,6 +85,10 @@ Huginn::Application.routes.draw do
       member do
         put :deactivate
         put :activate
+        get :switch_user
+      end
+      collection do
+        get :switch_back
       end
     end
   end
